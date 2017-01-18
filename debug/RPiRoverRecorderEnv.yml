@@ -1,0 +1,7 @@
+typename: RPiRoverRecorder
+args:
+  host: 192.168.1.9
+  port: 5000
+  distance_threshold: 23
+  mock: False
+  directory: debug/record

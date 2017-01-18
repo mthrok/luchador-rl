@@ -72,6 +72,9 @@ def _parse_updates(updates):
 def _parse_givens(givens):
     if givens is None:
         return givens
+    # NOTE:
+    # this does not handle the case where value is ShareVariable (wrapper),
+    # which is the truly beneficial usage of `givens` arg
     return {key.unwrap(): value for key, value in givens.items()}
 
 

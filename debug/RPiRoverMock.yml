@@ -1,0 +1,4 @@
+name: RPiRoverMock
+args:
+  distance_threshold: 30
+  resize: [57, 74]

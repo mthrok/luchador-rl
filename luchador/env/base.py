@@ -71,6 +71,8 @@ _ENVIRONMENT_MODULE_MAPPING = {
     'FlappyBird': 'flappy_bird',
     'CartPole': 'cart_pole',
     'RPiRover': 'rpi_rover',
+    'RPiRoverMock': 'rpi_rover',
+    'RPiRoverRecorder': 'rpi_rover',
 }
 
 

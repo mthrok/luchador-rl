@@ -1,0 +1,7 @@
+typename: RPiRover
+args:
+  host: 192.168.1.9
+  port: 5000
+  distance_threshold: 15
+  resize: [57, 74]
+  mock: True

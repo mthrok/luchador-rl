@@ -1,0 +1,66 @@
+alias:
+  width: &width 74
+  height: &height 57
+  stack: &stack 4
+  batch: &batch 64
+  initial_parameter: &initial_parameter null
+
+typename: RPiRoverControl
+args:
+  recorder_config:
+    memory_size: 10000
+    batch_size: *batch
+    buffer_config:
+      state:
+        shape:
+          - *height
+          - *width
+        dtype: float32
+        stack: *stack
+        transition: 2
+      action:
+        shape:
+          - 4
+        dtype: float32
+      reward:
+        stack: 1
+        dtype: float32
+      terminal:
+        stack: 1
+        dtype: bool
+
+  model_config:
+    model_file: ./debug/RPiRoverNN.yml
+    width: *width
+    height: *height
+    stacks: *stack
+    initial_parameter: *initial_parameter
+
+  q_network_config:
+    discount_rate: 0.99
+    optimizer_configs:
+      actor:
+        typename: Adam
+        args:
+          beta1: 0.9
+          beta2: 0.999
+          epsilon: 0.00000001
+          learning_rate: 0.0001
+      critic:
+        typename: NeonRMSProp
+        args:
+          beta1: 0.9
+          beta2: 0.999
+          epsilon: 0.00000001
+          learning_rate: 0.001
+
+  noise_config:
+    mu: 0
+    sigma: 0.3
+    theta: 0.15
+
+  training_config:
+    start: 500  # Train starts after this observation
+    sync: 1000  # Sync network every observation
+    update: 2  # Update network every this observation
+    n_samples: *batch

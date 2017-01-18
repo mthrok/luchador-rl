@@ -93,6 +93,7 @@ class NoOpAgent(BaseAgent):
 
 _AGENT_MODULE_MAPPING = {
     'DQNAgent': 'dqn',
+    'RPiRoverControl': 'rpi_rover',
 }
 
 
