@@ -7,6 +7,7 @@ from paste.translogger import TransLogger
 
 import luchador.util
 import luchador.env.remote
+import luchador.nn as nn
 
 _LG = logging.getLogger(__name__)
 
@@ -26,7 +27,7 @@ def _run_server(app, port):
 
 ###############################################################################
 def entry_point_env(args):
-    """Entry porint for `luchador serve env` command"""
+    """Entry point for ``luchador serve env`` command"""
     if args.environment is None:
         raise ValueError('Environment config is not given')
     env_config = luchador.util.load_config(args.environment)
@@ -36,6 +37,15 @@ def entry_point_env(args):
 
 
 def entry_point_manager(args):
-    """Entry porint for `luchador serve manager` command"""
+    """Entry point for ``luchador serve manager`` command"""
     app = luchador.env.remote.create_manager_app()
+    _run_server(app, args.port)
+
+
+def entry_point_param(args):
+    """Entry point for ``luchador serve parameter``"""
+    nn.make_model(args.model)
+    session = nn.Session()
+    session.initialize()
+    app = luchador.nn.remote.create_parameter_server_app(session)
     _run_server(app, args.port)

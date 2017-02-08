@@ -16,10 +16,10 @@ def _serialize_state(state, compress):
     return {'type': 'other', 'content': state}
 
 
-def _deserialize_state(obs):
-    if obs['type'] == 'np.ndarray':
-        return deserialize_numpy_array(obs['content'])
-    return obs['content']
+def _deserialize_state(obj):
+    if obj['type'] == 'np.ndarray':
+        return deserialize_numpy_array(obj['content'])
+    return obj['content']
 
 
 def serialize_outcome(outcome, compress=True):

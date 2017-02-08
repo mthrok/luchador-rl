@@ -116,7 +116,7 @@ def _jsonify(obj, code=200):
 def create_env_app(env):
     """Create Flask server for the given Environment
 
-    See module documentation for the derail of API call
+    See module documentation for the detail of API call
 
     Parameters
     ----------

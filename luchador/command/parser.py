@@ -80,9 +80,21 @@ def _add_serve_subcommand_parser(subparsers):
         'manager',
         description='Start manager server',
     )
-    _append_debug_flag(man_parser)
     _append_port_number(man_parser, 5001)
+    _append_debug_flag(man_parser)
     man_parser.set_defaults(func=serve.entry_point_manager)
+
+    param_parser = subsubparsers.add_parser(
+        'parameter',
+        description='Start parameter server',
+    )
+    param_parser.add_argument(
+        'model',
+        help='Model description file',
+    )
+    _append_port_number(param_parser, 5002)
+    _append_debug_flag(env_parser)
+    param_parser.set_defaults(func=serve.entry_point_param)
 
 
 def parse_command_line_args():
