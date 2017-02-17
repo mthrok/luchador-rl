@@ -19,27 +19,23 @@ class ContinuousActorCriticNetwork(object):
     def build(self, model_def):
         # Construct image preprocessor, actor and critic for t and t+1
         with nn.variable_scope('t_0'):
-            actor0, critic0 = nn.make_model(model_def)
+            model = nn.make_model(model_def)
+            actor0, critic0 = model.models['actor'], model.models['critic']
             state0, action0 = actor0.input, actor0.output
             q_value0 = critic0.output
         with nn.variable_scope('t_1'):
-            actor1, critic1 = nn.make_model(model_def)
+            model = nn.make_model(model_def)
+            actor1, critic1 = model.models['actor'], model.models['critic']
             state1, action1 = actor1.input, actor1.output
             q_value1 = critic1.output
 
         # Build cost function for Q value
         reward = nn.Input(shape=(None, 1), name='reward')
         terminal = nn.Input(shape=(None, 1), name='terminal')
-        sse2 = nn.cost.SSE2(max_delta=1.0, min_delta=-1.0)
         target_q = reward + (1 - terminal) * q_value1 * self.discount_rate
-        q_error = sse2(target_q, q_value0)
-
-        # Build optimization operations
-        # TODO:
-        #     For actor update: check Deterministic policy gradient algorithms
-        #     http://jmlr.org/proceedings/papers/v32/silver14.pdf
-        #     https://arxiv.org/pdf/1509.02971v5.pdf
-        #     https://github.com/stevenpjg/ddpg-aigym
+        delta = (target_q - q_value0)
+        q_error = nn.minimum(nn.abs(delta), (delta * delta))
+        q_error = q_error.mean()
 
         opt_cfg = self.optimizer_configs['actor']
         actor_optimizer = nn.get_optimizer(
@@ -64,9 +60,9 @@ class ContinuousActorCriticNetwork(object):
 
         sync_ops = [
             nn.build_sync_op(
-                target_vars=var_actor1, source_vars=var_actor0, tau=0.9),
+                target_vars=var_actor1, source_vars=var_actor0, tau=0.9, name='sync_actor'),
             nn.build_sync_op(
-                target_vars=var_critic1, source_vars=var_critic0, tau=0.9),
+                target_vars=var_critic1, source_vars=var_critic0, tau=0.9, name='sync_critic'),
         ]
 
         session = nn.Session()

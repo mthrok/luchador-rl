@@ -1,91 +1,107 @@
-### Actor
-- model_type: Sequential
-  input:
+typename: Container
+args:
+  input_config:
     typename: Input
     args:
       shape: {input_shape}
       dtype: float32
       name: depth_image
-  layer_configs:
-    ##### preprocessing - layer1
-    - scope: preprocessing/layer1/conv2d
-      typename: Conv2D
-      args:
-        n_filters: 32
-        filter_width: 8
-        filter_height: 8
-        strides: 4
-        padding: valid
-    - scope: preprocessing/layer1/relu
-      typename: ReLU
-    ##### preprocessing - layer2
-    - scope: preprocessing/layer2/conv2d
-      typename: Conv2D
-      args:
-        n_filters: 64
-        filter_width: 4
-        filter_height: 4
-        strides: 2
-        padding: valid
-    - scope: preprocessing/layer2/relu
-      typename: ReLU
-    ##### preprocessing - layer3
-    - scope: preprocessing/layer3/conv2d
-      typename: Conv2D
-      args:
-        n_filters: 64
-        filter_width: 3
-        filter_height: 3
-        strides: 1
-        padding: valid
-    - scope: preprocessing/layer3/relu
-      typename: ReLU
-    ##### preprocessing - layer4
-    - scope: preprocessing/layer4/flatten
-      typename: Flatten
-    ##### actor - layer1
-    - scope: actor/layer1/dense
-      typename: Dense
-      args:
-        n_nodes: 256
-    - scope: actor/layer1/relu
-      typename: ReLU
-    ##### actor - layer2
-    - scope: actor/layer2/dense
-      typename: Dense
-      args:
-        n_nodes: {n_motors}
-    - scope: actor/layer2/sin
-      typename: Sin
-### Critic
-- model_type: Sequential
-  input:
-    - typename: Tensor
-      name: preprocessing/layer4/flatten/output
+  output_config:
     - typename: Tensor
       name: actor/layer2/sin/output
-  layer_configs:
-    ##### Input - merge preprocessed and action
-    - scope: critic/layer0/input
-      typename: Concat
+    - typename: Tensor
+      name: critic/layer3/dense/output
+  model_configs:
+    ### Actor
+    - name: actor
+      typename: Sequential
       args:
-        axis: 1
-    ##### layer1
-    - scope: critic/layer1/dense
-      typename: Dense
+        input_config:
+          typename: Input
+          reuse: True
+          name: depth_image
+        layer_configs:
+          ##### preprocessing - layer1
+          - scope: preprocessing/layer1/conv2d
+            typename: Conv2D
+            args:
+              n_filters: 32
+              filter_width: 8
+              filter_height: 8
+              strides: 4
+              padding: valid
+          - scope: preprocessing/layer1/relu
+            typename: ReLU
+          ##### preprocessing - layer2
+          - scope: preprocessing/layer2/conv2d
+            typename: Conv2D
+            args:
+              n_filters: 64
+              filter_width: 4
+              filter_height: 4
+              strides: 2
+              padding: valid
+          - scope: preprocessing/layer2/relu
+            typename: ReLU
+          ##### preprocessing - layer3
+          - scope: preprocessing/layer3/conv2d
+            typename: Conv2D
+            args:
+              n_filters: 64
+              filter_width: 3
+              filter_height: 3
+              strides: 1
+              padding: valid
+          - scope: preprocessing/layer3/relu
+            typename: ReLU
+          ##### preprocessing - layer4
+          - scope: preprocessing/layer4/flatten
+            typename: Flatten
+          ##### actor - layer1
+          - scope: actor/layer1/dense
+            typename: Dense
+            args:
+              n_nodes: 256
+          - scope: actor/layer1/relu
+            typename: ReLU
+          ##### actor - layer2
+          - scope: actor/layer2/dense
+            typename: Dense
+            args:
+              n_nodes: {n_motors}
+          - scope: actor/layer2/sin
+            typename: Sin
+    ### Critic
+    - name: critic
+      typename: Sequential
       args:
-        n_nodes: 512
-    - scope: critic/layer1/relu
-      typename: ReLU
-    ##### layer2
-    - scope: critic/layer2/dense
-      typename: Dense
-      args:
-        n_nodes: 256
-    - scope: critic/layer2/relu
-      typename: ReLU
-    ##### layer3
-    - scope: critic/layer3/dense
-      typename: Dense
-      args:
-        n_nodes: 1
+        input_config:
+          - typename: Tensor
+            name: preprocessing/layer4/flatten/output
+          - typename: Tensor
+            name: actor/layer2/sin/output
+        layer_configs:
+          ##### Input - merge preprocessed and action
+          - scope: critic/layer0/input
+            typename: Concat
+            args:
+              axis: 1
+          ##### layer1
+          - scope: critic/layer1/dense
+            typename: Dense
+            args:
+              n_nodes: 512
+          - scope: critic/layer1/relu
+            typename: ReLU
+          ##### layer2
+          - scope: critic/layer2/dense
+            typename: Dense
+            args:
+              n_nodes: 256
+          - scope: critic/layer2/relu
+            typename: ReLU
+          ##### layer3
+          - scope: critic/layer3/dense
+            typename: Dense
+            args:
+              n_nodes: 1

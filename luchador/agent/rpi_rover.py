@@ -54,10 +54,7 @@ class RPiRoverControl(StoreMixin, luchador.agent.BaseAgent):
         fmt = luchador.get_nn_conv_format()
 
         c, h, w = cfg['stacks'], cfg['height'], cfg['width']
-        input_shape = (
-            '[null, {}, {}, {}]'.format(c, h, w) if fmt == 'NCHW' else
-            '[null, {}, {}, {}]'.format(h, w, c)
-        )
+        input_shape = [None, c, h, w] if fmt == 'NCHW' else [None, h, w, c]
 
         model_def = nn.get_model_config(
             cfg['model_file'], n_motors=self._n_actions,
