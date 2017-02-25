@@ -1,0 +1,19 @@
+model:
+  typename: Sequential
+  args:
+    input_config:
+      typename: Input
+      args:
+        shape: {input_shape}
+        name: input
+    layer_configs:
+      - typename: Pool2D
+        args:
+          kernel_height: 7
+          kernel_width: 5
+          strides: null
+          padding: valid
+          mode: average
+          name: ''
+
+input: input_mnist_10x4x28x27.h5
