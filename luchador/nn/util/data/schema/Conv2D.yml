@@ -1,0 +1,28 @@
+type: object
+properties:
+  filter_height:
+    type: number
+  filter_width:
+    type: number
+  n_filters:
+    type: number
+  strides:
+    type:
+      - number
+      - array
+  padding:
+    type:
+      - string
+      - number
+      - array
+  initializers:
+    type: object
+  with_bias:
+    type: boolean
+  name:
+    type: string
+required:
+  - filter_height
+  - filter_width
+  - n_filters
+  - strides

@@ -1,0 +1,8 @@
+type: object
+properties:
+  denom:
+    type: number
+  name:
+    type: string
+required:
+  - denom

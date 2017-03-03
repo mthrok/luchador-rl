@@ -4,6 +4,7 @@ from __future__ import absolute_import
 import logging
 
 from ... import core
+from .validator import validate_config
 from .io import make_io_node
 
 __all__ = ['make_node']
@@ -52,6 +53,7 @@ def make_node(config):
             name: layer8/ReLU/output
     """
     _LG.info('  Constructing Node: %s', config)
+    validate_config(config)
     if 'typename' not in config:
         raise RuntimeError('Node `typename` is not given')
 

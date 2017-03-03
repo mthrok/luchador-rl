@@ -1,0 +1,15 @@
+type: object
+properties:
+  scale:
+    type: number
+  offset:
+    type: number
+  epsilon:
+    type: number
+  learn:
+    type: boolean
+  decay:
+    type: number
+  name:
+    type: string
+

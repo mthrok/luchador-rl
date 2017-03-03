@@ -1,0 +1,10 @@
+type: object
+properties:
+  n_nodes:
+    type: number
+  initializers:
+    type: object
+  with_bias:
+    type: boolean
+  name:
+    type: string

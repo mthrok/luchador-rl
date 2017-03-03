@@ -1,0 +1,10 @@
+type: object
+properties:
+  input_config:
+    type: object
+  model_configs:
+    type: object
+  output_config:
+    type: object
+required:
+  - model_configs

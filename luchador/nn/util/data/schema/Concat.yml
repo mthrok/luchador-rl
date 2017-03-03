@@ -1,0 +1,8 @@
+type: object
+properties:
+  axis:
+    type:
+      - number
+      - array
+  name:
+    type: str

@@ -1,0 +1,6 @@
+type: object
+properties:
+  exp:
+    type: string
+  name:
+    type: string

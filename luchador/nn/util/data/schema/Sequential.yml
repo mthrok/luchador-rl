@@ -1,0 +1,8 @@
+type: object
+properties:
+  input_config:
+    type: object
+  layer_configs:
+    type: array
+required:
+  - layer_configs

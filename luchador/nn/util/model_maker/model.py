@@ -6,6 +6,7 @@ from collections import OrderedDict
 
 from ...model import Sequential, Graph, Container
 from .common import ConfigDict, parse_config
+from .validator import validate_config
 from .io import make_io_node
 from .node import make_node
 
@@ -127,5 +128,6 @@ def make_model(model_config):
     [list or dict of] Model
         Resulting model[s]
     """
+    validate_config(model_config)
     model_config = parse_config(model_config)
     return _make_model_recursively(model_config)
