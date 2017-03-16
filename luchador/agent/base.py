@@ -93,6 +93,8 @@ class NoOpAgent(BaseAgent):
 
 _AGENT_MODULE_MAPPING = {
     'DQNAgent': 'dqn',
+    'PredictionAgent': 'predictor',
+    'PredictionAgentTest': 'predictor',
 }
 
 

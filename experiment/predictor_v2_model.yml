@@ -1,0 +1,100 @@
+encoder: &encoder
+  typename: Sequential
+  args:
+    name: encoder
+    layer_configs:
+      - typename: Conv2D
+        args: &Conv2D_1
+          n_filters: 32
+          filter_width: 8
+          filter_height: 8
+          strides: 4
+          padding: valid
+          width_bias: False
+          name: layer_01_Conv2D
+      - typename: ReLU
+        args:
+          name: layer_01_ReLU
+      #--------------------
+      - typename: BatchNormalization
+        args:
+          name: layer_02_BN
+      #--------------------
+      - typename: Conv2D
+        args: &Conv2D_2
+          n_filters: 64
+          filter_width: 4
+          filter_height: 4
+          strides: 2
+          padding: valid
+          with_bias: False
+          name: layer_03_Conv2D
+      - typename: ReLU
+        args:
+          name: layer_03_ReLU
+      #--------------------
+      - typename: BatchNormalization
+        args:
+          name: layer_04_BN
+      #--------------------
+      - typename: Conv2D
+        args: &Conv2D_3
+          n_filters: 64
+          filter_width: 4
+          filter_height: 4
+          strides: 2
+          padding: valid
+          with_bias: False
+          name: layer_05_Conv2D
+      - typename: ReLU
+        args:
+          name: layer_05_ReLU
+      #--------------------
+      - typename: BatchNormalization
+        args:
+          name: layer_06_BN
+      #--------------------
+
+decoder: &decoder
+  typename: Sequential
+  args:
+    name: decoder
+    layer_configs:
+      - typename: Conv2DTranspose
+        args:
+          <<: *Conv2D_3
+          name: layer_07_Conv2DTranspose
+          output_shape: [32, 64, 9, 9]
+          output_shape_format: NCHW
+      - typename: ReLU
+        args:
+          name: layer_07_ReLU
+      #--------------------
+      - typename: BatchNormalization
+        args:
+          name: layer_08_BN
+      #--------------------
+      - typename: Conv2DTranspose
+        args:
+          <<: *Conv2D_2
+          name: layer_09_Conv2DTranspose
+          output_shape: [32, 32, 20, 20]
+          output_shape_format: NCHW
+      - typename: ReLU
+        args:
+          name: layer_09_ReLU
+      #--------------------
+      - typename: BatchNormalization
+        args:
+          name: layer_10_BN
+      #--------------------
+      - typename: Conv2DTranspose
+        args:
+          <<: *Conv2D_1
+          name: layer_11_Conv2DTranspose
+          output_shape: [32, 1, 84, 84]
+          output_shape_format: NCHW
+      - typename: ReLU
+        args:
+          name: layer_11_ReLU
+      #--------------------

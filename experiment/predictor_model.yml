@@ -1,0 +1,160 @@
+encoder: &encoder
+  typename: Sequential
+  args:
+    name: encoder
+    input_config:
+      typename: Input
+      reuse: True
+      name: state0
+    layer_configs:
+      #====================
+      - typename: Conv2D
+        args: &conv2d_1
+          n_filters: 32
+          filter_width: 8
+          filter_height: 8
+          strides: 4
+          padding: valid
+          with_bias: False
+          name: layer1/conv2D
+      - typename: BatchNormalization
+        args:
+          name: layer1/BN
+      - typename: ReLU
+        args:
+          name: layer1/ReLU
+      #====================
+      - typename: Conv2D
+        args: &conv2d_2
+          n_filters: 64
+          filter_width: 4
+          filter_height: 4
+          strides: 2
+          padding: valid
+          with_bias: False
+          name: layer2/conv2D
+      - typename: BatchNormalization
+        args:
+          name: layer2/BN
+      - typename: ReLU
+        args:
+          name: layer2/ReLU
+      #====================
+
+variation: &variation
+  typename: Graph
+  args:
+    name: variation
+    output_config:
+      mean:
+        typename: Tensor
+        name: layer3/mean/output
+      stddev:
+        typename: Tensor
+        name: layer3/stddev/output
+    node_configs:
+      #====================
+      - typename: Conv2D
+        args: &conv2d_mean
+          n_filters: 64
+          filter_width: 3
+          filter_height: 3
+          strides: 1
+          padding: valid
+          name: layer3/mean
+        input:
+          typename: Tensor
+          name: layer2/ReLU/output
+      #====================
+      - typename: Conv2D
+        args:
+          << : *conv2d_mean
+          name: layer3/stddev
+        input:
+          typename: Tensor
+          name: layer2/ReLU/output
+      #====================
+
+decoder: &decoder
+  typename: Sequential
+  args:
+    name: decoder
+    input_config:
+      typename: Tensor
+      name: layer3/mean/output
+    layer_configs:
+      #====================
+      - typename: Conv2DTranspose
+        args:
+          << : *conv2d_mean
+          name: layer4/conv2DTranspose
+        parameters:
+          original_filter:
+            typename: Variable
+            name: layer3/mean/filter
+          original_input:
+            typename: Tensor
+            name: layer2/ReLU/output
+      - typename: BatchNormalization
+        args:
+          name: layer4/BN
+      - typename: ReLU
+        args:
+          name: layer4/ReLU
+      #====================
+      - typename: Conv2DTranspose
+        args:
+          << : *conv2d_2
+          name: layer5/conv2DTranspose
+        parameters:
+          original_filter:
+            typename: Variable
+            name: layer2/conv2D/filter
+          original_input:
+            typename: Tensor
+            name: layer1/ReLU/output
+      - typename: BatchNormalization
+        args:
+          name: layer5/BN
+      - typename: ReLU
+        args:
+          name: layer5/ReLU
+      #====================
+      - typename: Conv2DTranspose
+        args:
+          << : *conv2d_1
+          name: layer6/conv2DTranspose
+        parameters:
+          original_filter:
+            typename: Variable
+            name: layer1/conv2D/filter
+          original_input:
+            typename: Input
+            reuse: True
+            name: state0
+      - typename: BatchNormalization
+        args:
+          name: layer6/BN
+      - typename: ReLU
+        args:
+          name: layer6/ReLU
+
+typename: Container
+args:
+  name: autoencoder
+  input_config:
+    typename: Input
+    args:
+      shape: {input_shape}
+      name: state0
+  output_config:
+    typename: Model
+    name: decoder
+    fetch: output
+  model_configs:
+    - << : *encoder
+      name: encoder
+    - << : *variation
+      name: variation
+    - << : *decoder
+      name: decoder

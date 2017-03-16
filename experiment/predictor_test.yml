@@ -1,0 +1,92 @@
+alias:
+  memory_size: &memory_size 25000
+  width: &width 84
+  height: &height 84
+  stack: &stack 4
+  batch: &batch 32
+  save_dir: &save_dir results/space_invaders/environment_learner/
+  save_prefix: &save_prefix DQN
+  actor_initial_parameter: &actor_initial_parameter example/space_invaders_vanilla_dqn_99000.h5
+  predictor_initial_parameter: &predictor_initial_parameter experiment/space_inveders_env_1000000.h5
+
+typename: PredictionAgentTest
+args:
+  record_config:
+    sort_frequency: *memory_size
+
+  recorder_config:
+    buffer_size: *memory_size
+    sample_size: *batch
+    priority: 0.7
+    importance: 0.5
+
+  actor_config:
+    model_file: vanilla_dqn
+    initial_parameter: *actor_initial_parameter
+    input_channel: *stack
+    input_height: *height
+    input_width: *width
+
+  q_network_config:
+    typename: DoubleDeepQLearning
+    args:
+      q_learning_config:
+        discount_rate: 0.99
+        # reward is clipped between the following min and max
+        min_reward: -1.0
+        max_reward: 1.0
+      optimizer_config:
+        typename: NeonRMSProp
+        args:
+          decay: 0.95
+          epsilon: 0.000001
+          learning_rate: 0.00025
+      clip_grads:
+        clip_norm: 10
+
+  predictor_config:
+    model_file: experiment/predictor_model.yml
+    initial_parameter: *predictor_initial_parameter
+    input_channel: 1
+    input_height: *height
+    input_width: *width
+    optimizer_config:
+      typename: Adam
+      args:
+        decay: 0.95
+        epsilon: 0.000001
+        learning_rate: 0.00025
+
+  saver_config:
+    output_dir: *save_dir
+    max_to_keep: 10
+    keep_every_n_hours: 0.5
+    prefix: *save_prefix
+
+  save_config:
+    # Save network parameter every once after this #trainings
+    # Giving non-positive value effectively disable save functionality
+    interval: 250000
+
+  summary_writer_config:
+    output_dir: *save_dir
+
+  summary_config:
+    # Summarize network every once after this #trainings
+    # Giving non-positive value effectively disable save functionality
+    interval: 50000
+
+  action_config:
+    method: linear
+    duration: 1000000
+    epsilon_init: 1.0
+    epsilon_term: 0.1
+
+  training_config:
+    # Training starts after this number of transitions are recorded
+    # Giving negative value effectively disable training and network sync
+    train_start: *memory_size
+    # Train network every this number of observations are made
+    train_frequency: 4
+    # Sync networks every this number of observations are made
+    sync_frequency: 10000
