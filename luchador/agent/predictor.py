@@ -192,37 +192,17 @@ class Predictor(StoreMixin):
         }
 
     ###########################################################################
-    '''
     def predict(self, state_0, action):
         """Given state and action, predict the next state"""
-        mapped, stddev = self.session.run(
-            outputs=[
-                self.models['model_0']['variation'].output['mapped'],
-                self.models['model_0']['variation'].output['stddev']
-            ],
+        return self.session.run(
+            outputs=[self.vars['state_0_recon'], self.vars['state_1_recon']],
             inputs={
                 self.vars['state0']: state_0,
+                self.vars['action']: action,
             },
-            name='predict_1',
+            name='prediction',
         )
-        latent = mapped + action * stddev
 
-        state1_pred = self.session.run(
-            outputs=self.models['model0'].output,
-            givens={
-                self.models['model0']['decoder'].input: latent,
-            },
-            name='predict_2',
-        )
-        state0_pred = self.session.run(
-            outputs=self.models['model0'].output,
-            givens={
-                self.models['model0']['decoder'].input: mapped,
-            },
-            name='predict_3',
-        )
-        return state0_pred, state1_pred
-    '''
 
 def _gen_model_def(config, n_actions, batch_size=None):
     fmt, w = luchador.get_nn_conv_format(), config['input_width']
