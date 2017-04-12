@@ -1,5 +1,5 @@
 alias:
-  memory_size: &memory_size 25000
+  memory_size: &memory_size 32
   width: &width 84
   height: &height 84
   stack: &stack 4
@@ -7,7 +7,7 @@ alias:
   save_dir: &save_dir results/space_invaders/environment_learner/
   save_prefix: &save_prefix DQN
   actor_initial_parameter: &actor_initial_parameter example/space_invaders_vanilla_dqn_99000.h5
-  predictor_initial_parameter: &predictor_initial_parameter experiment/space_inveders_env_1000000.h5
+  predictor_initial_parameter: &predictor_initial_parameter experiment/space_inveders_env_10000000.h5
 
 typename: PredictionAgentTest
 args:
@@ -45,7 +45,7 @@ args:
         clip_norm: 10
 
   predictor_config:
-    model_file: experiment/predictor_model.yml
+    model_file: experiment/predictor_v2_model.yml
     initial_parameter: *predictor_initial_parameter
     input_channel: 1
     input_height: *height

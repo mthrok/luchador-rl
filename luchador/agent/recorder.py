@@ -160,6 +160,9 @@ class PrioritizedQueue(object):
         self.id2record = {}  # record ID -> actual record
         self.id2index = {}  # record ID -> index in array
 
+    def __len__(self):
+        return len(self.buffer)
+
     ###########################################################################
     # Hepler methods for balancing/sorting heap
     def _swap(self, i_1, i_2):

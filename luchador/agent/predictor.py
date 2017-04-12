@@ -197,7 +197,7 @@ class Predictor(StoreMixin):
         return self.session.run(
             outputs=[self.vars['state_0_recon'], self.vars['state_1_recon']],
             inputs={
-                self.vars['state0']: state_0,
+                self.vars['state_0']: state_0,
                 self.vars['action']: action,
             },
             name='prediction',
@@ -534,28 +534,46 @@ class PredictionAgent(StoreMixin, BaseAgent):
 
 class PredictionAgentTest(PredictionAgent):
     def learn(self, state0, action, reward, state1, terminal, info=None):
-        import matplotlib.pyplot as plt
         self._n_obs += 1
         self._record(state0, action, reward, state1, terminal)
 
-        state0 = (state0[-1:, :, :] / 255).astype(np.float32)
-        state0 = np.asarray([state0]*32)
-        state1 = (state1[-1, :, :] / 255).astype(np.float32)
-        if luchador.get_nn_conv_format() == 'NHWC':
-            state0 = _transpose(state0)
-
-        state0_pred, state1_pred = self._pred.predict(state0, action)
-
-        fig = plt.figure()
-        ax = fig.add_subplot(2, 2, 1)
-        ax.imshow(state0[0][0])
-        ax = fig.add_subplot(2, 2, 2)
-        ax.imshow(state1)
-        ax = fig.add_subplot(2, 2, 3)
-        ax.imshow(state0_pred[0][0])
-        ax = fig.add_subplot(2, 2, 4)
-        ax.imshow(state1_pred[0][0])
-        plt.show()
-
     def perform_post_episode_task(self, stats):
-        pass
+        if len(self._recorder) < 32:
+            return
+
+        if np.random.rand() < 0.95:
+            return
+
+        import matplotlib.pyplot as plt
+        samples, _ = self._sample()
+        samples['state0'] = samples['state0'][:, -1:, :, :] / 255
+        samples['state0'] = samples['state0'].astype(np.float32)
+        samples['state1'] = samples['state1'][:, -1:, :, :] / 255
+        samples['state1'] = samples['state1'].astype(np.float32)
+        samples['action'] = samples['action'].reshape((-1, 1, 1, 1))
+
+        if luchador.get_nn_conv_format() == 'NHWC':
+            samples['state0'] = _transpose(samples['state0'])
+            samples['state1'] = _transpose(samples['state1'])
+
+        state0_pred, state1_pred = self._pred.predict(
+            samples['state0'], samples['action'])
+
+        for batch in range(32):
+            fig = plt.figure()
+            ax = fig.add_subplot(2, 2, 1)
+            ax.imshow(samples['state0'][batch][0])
+            ax.set_title('State 0')
+
+            ax = fig.add_subplot(2, 2, 2)
+            ax.imshow(state0_pred[batch][0])
+            ax.set_title('Reconstructed State 0')
+
+            ax = fig.add_subplot(2, 2, 3)
+            ax.imshow(samples['state1'][batch][0])
+            ax.set_title('State 1')
+
+            ax = fig.add_subplot(2, 2, 4)
+            ax.imshow(state1_pred[batch][0])
+            ax.set_title('Reconstructed State 1')
+        plt.show()
