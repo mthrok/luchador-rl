@@ -561,6 +561,8 @@ class PredictionAgentTest(PredictionAgent):
 
         for batch in range(32):
             fig = plt.figure()
+            fig.suptitle('Action: {}'.format(samples['action'][0, 0, 0, 0]))
+
             ax = fig.add_subplot(2, 2, 1)
             ax.imshow(samples['state0'][batch][0])
             ax.set_title('State 0')
