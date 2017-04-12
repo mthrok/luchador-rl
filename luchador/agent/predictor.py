@@ -66,12 +66,13 @@ class Predictor(StoreMixin):
             state1_pred = decoder(mapped1)
 
         with nn.variable_scope('recon_error'):
+            mask = 1 + nn.ops.abs(state0 - state1)
             recon_error0 = nn.cost.SSE(elementwise=True, name='recon_error0')(
                 target=state0, prediction=state0_pred)
             recon_error1 = nn.cost.SSE(elementwise=True, name='recon_error1')(
                 target=state1, prediction=state1_pred)
             recon_error = nn.ops.reduce_sum(
-                recon_error0 + recon_error1, axis=[1, 2, 3])
+                mask * (recon_error0 + recon_error1), axis=[1, 2, 3])
 
         with nn.variable_scope('loss'):
             weighted_error = recon_error * weight
