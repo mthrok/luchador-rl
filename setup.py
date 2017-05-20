@@ -117,14 +117,16 @@ def _setup():
         test_suite='tests.unit',
         install_requires=[
             'Pillow',  # For scipy.misc.imresize
-            'h5py',
-            'ruamel.yaml',
+            'luchador',
             'pygame',
             'pyglet',
             'flask',
             'cheroot',
             'paste',
             'requests',
+        ],
+        dependency_links=[
+            'git+https://github.com/mthrok/luchador.git'
         ],
         package_data={
             'luchador_rl': [
