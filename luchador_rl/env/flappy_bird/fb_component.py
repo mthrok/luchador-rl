@@ -69,6 +69,7 @@ class Pipes(object):
         self.x_gap = x_gap
         self.n_pipes = n_pipes
         self.rng = rng
+        self.pipes = []
 
     def reset(self):
         self.pipes = []
@@ -94,7 +95,7 @@ class Pipes(object):
 class Player(Component):
     def __init__(self, w, h, x, y, y_max, vy, vy_flap, vy_max, ay):
         super(Player, self).__init__(w, h, x, y, 0, vy)
-        self.ay = 1
+        self.ay = ay
         self.y_max = y_max
         self.vy_max = vy_max
         self.vy_flap = vy_flap

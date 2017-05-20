@@ -59,8 +59,8 @@ def _get_box(x, x_dot, theta, theta_dot):
     return box
 
 
-def _truncated_sigmoid(s):
-    return 1. / (1. + np.exp(-max(-50., min(s, 50.))))
+def _truncated_sigmoid(x):
+    return 1. / (1. + np.exp(-max(-50., min(x, 50.))))
 
 
 class CartPoleAgent(BaseAgent):
@@ -68,12 +68,13 @@ class CartPoleAgent(BaseAgent):
 
     https://webdocs.cs.ualberta.ca/~sutton/book/code/pole.c
     """
-    def __init__(self,
-                 action_lr=1000,
-                 critic_lr=0.5,
-                 critic_discount=0.95,
-                 action_decay=0.9,
-                 critic_decay=0.8):
+    def __init__(
+            self,
+            action_lr=1000,
+            critic_lr=0.5,
+            critic_discount=0.95,
+            action_decay=0.9,
+            critic_decay=0.8):
 
         self.action_lr = action_lr
         self.critic_lr = critic_lr
