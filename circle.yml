@@ -36,7 +36,6 @@ stages:
       - type: shell
         name: Serialization Test
         command: ./tests/integration/run_serialization_tests.sh
-
       - type: shell
         name: Server Client Test
         command: ./tests/integration/test_server_client/run_server_client.sh
