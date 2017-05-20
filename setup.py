@@ -55,7 +55,7 @@ class DownloadALECommand(setuptools.Command):
             'arcade-learning-environment/attach/10bc8e55829890/'
             'supported_roms.zip?part=0.1&authuser=0&view=1'
         )
-        self.output_dir = os.path.join(BASE_DIR, 'luchador', ALE_ROM_DIR)
+        self.output_dir = os.path.join(BASE_DIR, 'luchador_rl', ALE_ROM_DIR)
 
     def finalize_options(self):
         """Ensure the target directory exists"""
@@ -101,7 +101,7 @@ def _get_version():
 
 def _setup():
     setuptools.setup(
-        name='luchador',
+        name='luchador_rl',
         version=_get_version(),
         cmdclass={
             'download_ale': DownloadALECommand,
@@ -111,7 +111,7 @@ def _setup():
         packages=setuptools.find_packages(),
         entry_points={
             'console_scripts': [
-                'luchador = luchador.command.main:entry_point',
+                'luchador_rl = luchador.command.main:entry_point',
             ]
         },
         test_suite='tests.unit',
@@ -127,9 +127,8 @@ def _setup():
             'requests',
         ],
         package_data={
-            'luchador': [
-                'nn/data/*.yml',
-                '{}/*.bin'.format(ALE_ROM_DIR),
+            'luchador_rl': [
+                'agent/data/*.yml',
             ],
         },
     )

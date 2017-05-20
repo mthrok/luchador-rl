@@ -11,6 +11,9 @@ stages:
       - type: checkout
       - type: shell
         name: Install Luchador
+        command: pip install --upgrade --no-deps --force-reinstall git+git://github.com/mthrok/luchador.git
+      - type: shell
+        name: Install Luchador RL
         command: pip install -e .
       - type: shell
         name: Print Version
@@ -21,6 +24,7 @@ stages:
           python -c "import theano;print('Theano:', theano.__version__)"
           python -c "import tensorflow;print('Tensorflow:', tensorflow.__version__)"
           python -c "import luchador;print('luchador:', luchador.__version__)"
+          python -c "import luchador_rl;print('luchador_rl:', luchador_rl.__version__)"
       # Unit Test
       - type: shell
         name: Theano Unit Test
@@ -32,15 +36,7 @@ stages:
       - type: shell
         name: Serialization Test
         command: ./tests/integration/run_serialization_tests.sh
-      - type: shell
-        name: Initializer Numerical Compatibility Test
-        command: ./tests/integration/run_initializer_compatibility_test.sh
-      - type: shell
-        name: Layer Numerical Compatibility Test
-        command: ./tests/integration/run_layer_numerical_compatibility_tests.sh
-      - type: shell
-        name: Optimizer Numerical Compatibility Test
-        command: ./tests/integration/run_optimizer_numerical_compatibility_tests.sh
+
       - type: shell
         name: Server Client Test
         command: ./tests/integration/test_server_client/run_server_client.sh
@@ -59,29 +55,11 @@ stages:
       - type: shell
         name: DQN TensorFlow
         command: LUCHADOR_NN_BACKEND=tensorflow LUCHADOR_NN_CONV_FORMAT=NHWC LUCHADOR_NN_DTYPE=float32 ./tests/integration/run_dqn.sh
-      - type: shell
-        name: AE Theano 32 bit
-        command: LUCHADOR_NN_BACKEND=theano THEANO_FLAGS='floatX=float32' ./tests/integration/run_autoencoder.sh
-      - type: shell
-        name: AE Theano 64 bit
-        command: LUCHADOR_NN_BACKEND=theano THEANO_FLAGS='floatX=float64' ./tests/integration/run_autoencoder.sh
-      - type: shell
-        name: AE Tensorflow
-        command: LUCHADOR_NN_BACKEND=tensorflow LUCHADOR_NN_CONV_FORMAT=NHWC LUCHADOR_NN_DTYPE=float32 ./tests/integration/run_autoencoder.sh
-      - type: shell
-        name: MNIST classification Theano 32 bit
-        command: LUCHADOR_NN_BACKEND=theano THEANO_FLAGS='floatX=float32' ./tests/integration/run_mnist.sh
-      - type: shell
-        name: MNIST classification Theano 64 bit
-        command: LUCHADOR_NN_BACKEND=theano THEANO_FLAGS='floatX=float64' ./tests/integration/run_mnist.sh
-      - type: shell
-        name: MNIST classification Tensorflow
-        command: LUCHADOR_NN_BACKEND=tensorflow LUCHADOR_NN_CONV_FORMAT=NHWC LUCHADOR_NN_DTYPE=float32 ./tests/integration/run_mnist.sh
       # Style check
       - type: shell
         name: Style Check
         command: |
-          flake8 luchador
+          flake8 luchador_rl
           flake8 tests
       # Report coverage
       - type: shell
