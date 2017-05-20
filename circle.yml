@@ -11,7 +11,8 @@ stages:
       - type: checkout
       - type: shell
         name: Install Luchador
-        command: pip install git+git://github.com/mthrok/luchador.git
+        # TODO: change this to master once merged
+        command: pip install git+git://github.com/mot0/luchador.git@split/repo
       - type: shell
         name: Install Luchador RL
         command: pip install -e .
