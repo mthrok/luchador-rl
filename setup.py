@@ -126,7 +126,7 @@ def _setup():
             'requests',
         ],
         dependency_links=[
-            'git+https://github.com/mthrok/luchador.git'
+            'https://github.com/mthrok/luchador.git#egg=luchador',
         ],
         package_data={
             'luchador_rl': [
