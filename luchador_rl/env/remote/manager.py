@@ -4,9 +4,9 @@ Manager Server is for starting new Environment server on local machine via
 POST request.
 Manager server can be created using :py:func:`create_manager_app` as following.
 
->>> import luchador.env
->>> app = luchador.env.remote.create_manager_app(env)
->>> server = luchador.env.remote.create_server(app)
+>>> import luchador_rl.env
+>>> app = luchador_rl.env.remote.create_manager_app(env)
+>>> server = luchador_rl.env.remote.create_server(app)
 >>> server.start()
 
 Manager API
@@ -80,7 +80,7 @@ def create_manager_app():
             return error.args[0], 400
 
         file_ = _create_temp_environment_file(env_cfg)
-        cmd = ['luchador', 'serve', 'env', file_.name, '--port', port]
+        cmd = ['luchador_rl', 'serve', 'env', file_.name, '--port', port]
         if xvfb:
             cmd = ['xvfb-run'] + cmd
         _LG.info('Starting environment server: %s', cmd)

@@ -4,10 +4,10 @@ from __future__ import absolute_import
 
 import logging
 
-from luchador.env import get_env
-from luchador.agent import get_agent
 from luchador.util import load_config
-from luchador.episode_runner import EpisodeRunner
+from luchador_rl.env import get_env
+from luchador_rl.agent import get_agent
+from luchador_rl.episode_runner import EpisodeRunner
 
 _LG = logging.getLogger(__name__)
 

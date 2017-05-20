@@ -115,7 +115,7 @@ def get_agent(typename):
         When Agent with the given name is not found
     """
     if typename in _AGENT_MODULE_MAPPING:
-        module = 'luchador.agent.{:s}'.format(_AGENT_MODULE_MAPPING[typename])
+        module = 'luchador_rl.agent.{:s}'.format(_AGENT_MODULE_MAPPING[typename])
         importlib.import_module(module)
 
     for class_ in fetch_subclasses(BaseAgent):

@@ -5,10 +5,10 @@ Agent program. Environment methods are called with API routes with identical
 names and parameters are passed via POST method. Server can be created using
 :py:func:`create_env_app` as following.
 
->>> import luchador.env
->>> env = luchador.env.get_env(name)(**args)
->>> app = luchador.env.remote.create_env_app(env)
->>> server = luchador.env.remote.create_server(app)
+>>> import luchador_rl.env
+>>> env = luchador_rl.env.get_env(name)(**args)
+>>> app = luchador_rl.env.remote.create_env_app(env)
+>>> server = luchador_rl.env.remote.create_server(app)
 >>> server.start()
 
 Server API
