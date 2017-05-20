@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 import numpy as np
 
-import luchador_rl.util.render
+from luchador_rl.util import render as render_mod
 
 
 class CartPoleRenderer(object):
@@ -25,7 +25,7 @@ class CartPoleRenderer(object):
         self._init_pole()
 
     def _init_window(self):
-        self._renderer = luchador.util.render.Renderer(width=600, height=600)
+        self._renderer = render_mod.Renderer(width=600, height=600)
         self._renderer.init_window(color=(0.2, 0.2, 0.2, 1.0))
         self._renderer.window.on_close = self._stop_rendering
 
@@ -39,19 +39,19 @@ class CartPoleRenderer(object):
         color = (.2, .3, .2)
         for i in np.arange(0.0, lim, 0.2):
             for sign in [-1.0, 1.0]:
-                axis = luchador.util.render.Line(
+                axis = render_mod.Line(
                     start=(-lim, sign*i), end=(lim, sign*i), color=color)
                 self._renderer.add_geometry(axis)
-                axis = luchador.util.render.Line(
+                axis = render_mod.Line(
                     start=(sign*i, -lim), end=(sign*i, lim), color=color)
                 self._renderer.add_geometry(axis)
         color = (.2, .4, .2)
         for i in np.arange(0.0, lim, 1.0):
             for sign in [-1.0, 1.0]:
-                axis = luchador.util.render.Line(
+                axis = render_mod.Line(
                     start=(-lim, sign*i), end=(lim, sign*i), color=color)
                 self._renderer.add_geometry(axis)
-                axis = luchador.util.render.Line(
+                axis = render_mod.Line(
                     start=(sign*i, -lim), end=(sign*i, lim), color=color)
                 self._renderer.add_geometry(axis)
 
@@ -61,10 +61,10 @@ class CartPoleRenderer(object):
 
         right, left = cart_width / 2.0, -cart_width / 2.0
         top, bottom = cart_height / 2.0, -cart_height / 2.0
-        self._cart = luchador.util.render.Polygon(
+        self._cart = render_mod.Polygon(
             [(left, bottom), (left, top), (right, top), (right, bottom)])
         self._cart.set_color(.5, .5, .5)
-        self._cart_trans = luchador.util.render.Transform()
+        self._cart_trans = render_mod.Transform()
         self._cart.add_attr(self._cart_trans)
         self._renderer.add_geometry(self._cart)
 
@@ -74,10 +74,10 @@ class CartPoleRenderer(object):
 
         right, left = pole_width / 2.0, -pole_width / 2.0
         top, bottom = pole_height, 0.0
-        self._pole = luchador.util.render.Polygon(
+        self._pole = render_mod.Polygon(
             [(left, bottom), (left, top), (right, top), (right, bottom)])
         self._pole.set_color(.8, .6, .4)
-        self._pole_trans = luchador.util.render.Transform()
+        self._pole_trans = render_mod.Transform()
         self._pole.add_attr(self._pole_trans)
         self._pole.add_attr(self._cart_trans)
         self._renderer.add_geometry(self._pole)
