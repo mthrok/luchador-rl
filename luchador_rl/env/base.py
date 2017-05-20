@@ -98,8 +98,8 @@ def get_env(typename):
     # TLS Error is avoidable only by upgrading underlying libc version, which
     # is not easy. So we import such environments on-demand.
     if typename in _ENVIRONMENT_MODULE_MAPPING:
-        module = 'luchador_rl.env.{:s}'.format(
-            _ENVIRONMENT_MODULE_MAPPING[typename])
+        sub_module = _ENVIRONMENT_MODULE_MAPPING[typename]
+        module = 'luchador_rl.env.{:s}'.format(sub_module)
         importlib.import_module(module)
 
     for class_ in fetch_subclasses(BaseEnvironment):

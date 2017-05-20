@@ -1,5 +1,4 @@
 """Define agent interface"""
-
 from __future__ import absolute_import
 import abc
 import importlib
@@ -115,7 +114,8 @@ def get_agent(typename):
         When Agent with the given name is not found
     """
     if typename in _AGENT_MODULE_MAPPING:
-        module = 'luchador_rl.agent.{:s}'.format(_AGENT_MODULE_MAPPING[typename])
+        sub_module = _AGENT_MODULE_MAPPING[typename]
+        module = 'luchador_rl.agent.{:s}'.format(sub_module)
         importlib.import_module(module)
 
     for class_ in fetch_subclasses(BaseAgent):
