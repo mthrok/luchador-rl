@@ -11,6 +11,7 @@ import luchador.util
 from luchador import nn
 
 from .base import BaseAgent
+from .model import get_model_config
 from .recorder import PrioritizedQueue
 from .misc import EGreedy
 from .rl import DeepQLearning, DoubleDeepQLearning
@@ -37,7 +38,7 @@ def _gen_model_def(config, n_actions):
     h, c = config['input_height'], config['input_channel']
     model = config['model_file']
     shape = [None, h, w, c] if fmt == 'NHWC' else [None, c, h, w]
-    return nn.get_model_config(model, n_actions=n_actions, input_shape=shape)
+    return get_model_config(model, n_actions=n_actions, input_shape=shape)
 
 
 def _get_q_network(config):
