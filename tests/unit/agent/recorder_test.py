@@ -8,7 +8,7 @@ import unittest
 
 import numpy as np
 
-from luchador.agent.recorder import PrioritizedQueue
+from luchador_rl.agent.recorder import PrioritizedQueue
 
 
 def _get_rng(seed=123):

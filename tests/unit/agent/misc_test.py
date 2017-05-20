@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import os
 import unittest
 
-from luchador.agent import misc
+from luchador_rl.agent import misc
 
 
 class EGreedyTest(unittest.TestCase):

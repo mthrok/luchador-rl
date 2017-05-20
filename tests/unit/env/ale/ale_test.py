@@ -4,7 +4,7 @@ import unittest
 
 import numpy as np
 
-from luchador.env.ale import ALEEnvironment as ALE
+from luchador_rl.env.ale import ALEEnvironment as ALE
 
 
 class ALEEnvShapeTest(unittest.TestCase):

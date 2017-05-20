@@ -1,17 +1,16 @@
 """Build network model and run optimization, then saven variables"""
 import logging
 
-import numpy as np
-
 # import theano
 # theano.config.optimizer = 'None'
 # theano.config.exception_verbosity = 'high'
-
+import numpy as np
 import luchador
-from luchador.util import load_config, initialize_logger
 from luchador import nn
 from luchador.nn.saver import Saver
-from luchador.agent.rl.q_learning import DeepQLearning
+from luchador.util import load_config, initialize_logger
+
+from luchador_rl.agent.rl.q_learning import DeepQLearning
 
 _LG = logging.getLogger('luchador')
 

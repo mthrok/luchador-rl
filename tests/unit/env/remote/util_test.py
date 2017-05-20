@@ -5,8 +5,8 @@ import unittest
 
 import numpy as np
 
-from luchador.env import Outcome
-from luchador.env.remote import util
+from luchador_rl.env import Outcome
+from luchador_rl.env.remote import util
 
 
 def _test_round_trip(expected, compress):

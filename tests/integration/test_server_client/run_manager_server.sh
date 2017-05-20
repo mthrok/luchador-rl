@@ -6,7 +6,7 @@ if [ ${COUNT_INTEGRATION_COVERAGE:-false} = true ]; then
     MAN_PORT="5008"
     ENV_PORT="5009"
 else
-    TEST_COMMAND="luchador"
+    TEST_COMMAND="luchador_rl"
     MAN_PORT="5000"
     ENV_PORT="5001"
 fi
