@@ -111,7 +111,7 @@ def _setup():
         packages=setuptools.find_packages(),
         entry_points={
             'console_scripts': [
-                'luchador_rl = luchador.command.main:entry_point',
+                'luchador_rl = luchador_rl.command.main:entry_point',
             ]
         },
         test_suite='tests.unit',
