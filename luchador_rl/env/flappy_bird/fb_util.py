@@ -39,8 +39,8 @@ def load_sounds():
 
 def load_digits():
     return [
-            _load_sprite('{digit:1d}.png'.format(digit=d)).convert_alpha()
-            for d in range(10)
+        _load_sprite('{digit:1d}.png'.format(digit=d)).convert_alpha()
+        for d in range(10)
     ]
 
 
@@ -68,8 +68,8 @@ def load_players():
 
 def load_pipes():
     ret = []
-    for f in ['pipe-green.png', 'pipe-red.png']:
-        pipe = _load_sprite(f).convert_alpha()
+    for filename in ['pipe-green.png', 'pipe-red.png']:
+        pipe = _load_sprite(filename).convert_alpha()
         images = [pygame.transform.rotate(pipe, 180), pipe]
         hitmasks = [_gen_hitmask(image) for image in images]
         ret.append({'images': images, 'hitmasks': hitmasks})
