@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 import numpy as np
 
-import luchador.util.render
+import luchador_rl.util.render
 
 
 class CartPoleRenderer(object):
