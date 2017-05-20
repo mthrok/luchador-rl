@@ -6,8 +6,9 @@ import numpy as np
 
 import luchador
 import luchador.nn as nn
-from luchador.nn import util
-from luchador.agent.rl.q_learning import DeepQLearning
+
+from luchador_rl.agent import get_model_config
+from luchador_rl.agent.rl.q_learning import DeepQLearning
 from tests.unit import fixture
 
 _CONV = luchador.get_nn_conv_format()
@@ -41,7 +42,7 @@ def _make_dqn(
         if input_shape is None:
             input_shape = [
                 None, 4, 84, 84] if _CONV == 'NCHW' else [None, 84, 84, 4]
-        model_def = util.get_model_config(
+        model_def = get_model_config(
             'vanilla_dqn', input_shape=input_shape, n_actions=n_actions,
         )
     session = nn.Session()
@@ -55,7 +56,7 @@ class DQNTest(fixture.TestCase):
     def test_sync(self):
         """Sync operation copy model0 network parameters to model1"""
         shape = [None, 4, 84, 84] if _CONV == 'NCHW' else [None, 84, 84, 4]
-        model_def = util.get_model_config(
+        model_def = get_model_config(
             'vanilla_dqn', input_shape=shape, n_actions=5)
         # Skip biases as they are deterministically initialized
         for cfg in model_def['args']['layer_configs']:

@@ -4,7 +4,7 @@ from __future__ import absolute_import
 import json
 import requests
 
-import luchador.env.base as base_env
+import luchador_rl.env.base as base_env
 from .util import deserialize_outcome
 
 

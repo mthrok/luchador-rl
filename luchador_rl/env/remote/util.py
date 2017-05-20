@@ -3,7 +3,7 @@ from __future__ import absolute_import
 
 import numpy as np
 
-from luchador.util import serialize_numpy_array, deserialize_numpy_array
+from luchador_rl.util import serialize_numpy_array, deserialize_numpy_array
 from ..base import Outcome
 
 
