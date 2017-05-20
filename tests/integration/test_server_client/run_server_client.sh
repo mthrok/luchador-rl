@@ -5,7 +5,7 @@ if [ ${COUNT_INTEGRATION_COVERAGE:-false} = true ]; then
     TEST_COMMAND="coverage run --parallel-mode tool/profile.py"
     PORT="12345"
 else
-    TEST_COMMAND="luchador"
+    TEST_COMMAND="luchador_rl"
     PORT="12345"
 fi
 
