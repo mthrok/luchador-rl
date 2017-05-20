@@ -1,5 +1,6 @@
 typename: Sequential
 args:
+  name: q_network
   input_config:
     typename: Input
     args:
