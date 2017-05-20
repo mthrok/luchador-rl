@@ -125,9 +125,6 @@ def _setup():
             'paste',
             'requests',
         ],
-        dependency_links=[
-            'git+ssh://git@github.com/mthrok/luchador.git#egg=luchador',
-        ],
         package_data={
             'luchador_rl': [
                 'agent/data/*.yml',

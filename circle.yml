@@ -11,6 +11,9 @@ stages:
       - type: checkout
       - type: shell
         name: Install Luchador
+        command: pip install git+git://github.com/mthrok/luchador.git
+      - type: shell
+        name: Install Luchador RL
         command: pip install -e .
       - type: shell
         name: Print Version
