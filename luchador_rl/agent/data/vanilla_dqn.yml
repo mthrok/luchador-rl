@@ -1,12 +1,4 @@
-typename: Sequential
-args:
-  name: q_network
-  input_config:
-    typename: Input
-    args:
-      dtype: uint8
-      shape: {input_shape}
-      name: state
+layer_configs: &layer_configs
   layer_configs:
     - typename: TrueDiv
       args:
@@ -59,3 +51,37 @@ args:
       args:
         n_nodes: {n_actions}
         name: layer6/dense
+
+pre_trans: &pre_trans
+  typename: Sequential
+  scope: pre_trans
+  args:
+    name: pre_trans_q_network
+    input_config:
+      typename: Input
+      args:
+        dtype: uint8
+        shape: {input_shape}
+        name: pre_state
+    layer_configs: *layer_configs
+
+post_trans: &pre_trans
+  typename: Sequential
+  scope: post_trans
+  args:
+    name: post_trans_q_network
+    input_config:
+      typename: Input
+      args:
+        dtype: uint8
+        shape: {input_shape}
+        name: post_state
+    layer_configs: *layer_configs
+
+typename: Container
+args:
+  model_configs:
+    - <<: *pre_trans
+      name: pre_trans
+    - <<: *post_trans
+      name: post_trans
