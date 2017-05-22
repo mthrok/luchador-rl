@@ -127,7 +127,6 @@ pre_trans_q_value: &pre_trans_q_value
 
 pre_trans: &pre_trans
   typename: Container
-  scope: pre_trans
   args:
     input_config:
       typename: Input
@@ -202,7 +201,6 @@ post_trans_q_value: &post_trans_q_value
 
 post_trans: &post_trans
   typename: Container
-  scope: post_trans
   args:
     input_config:
       typename: Input
@@ -231,5 +229,7 @@ args:
   model_configs:
     - <<: *pre_trans
       name: pre_trans
+      scope: pre_trans
     - <<: *post_trans
       name: post_trans
+      scope: post_trans

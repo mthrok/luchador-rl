@@ -51,11 +51,10 @@ layer_configs: &layer_configs
       n_nodes: {n_actions}
       scope: layer6/dense
 
+################################################################################
 pre_trans: &pre_trans
   typename: Sequential
-  scope: pre_trans
   args:
-    name: pre_trans_q_network
     input_config:
       typename: Input
       args:
@@ -66,9 +65,7 @@ pre_trans: &pre_trans
 
 post_trans: &post_trans
   typename: Sequential
-  scope: post_trans
   args:
-    name: post_trans_q_network
     input_config:
       typename: Input
       args:
@@ -77,10 +74,13 @@ post_trans: &post_trans
         name: post_state
     layer_configs: *layer_configs
 
+################################################################################
 typename: Container
 args:
   model_configs:
     - <<: *pre_trans
       name: pre_trans
+      scope: pre_trans
     - <<: *post_trans
       name: post_trans
+      scope: post_trans
