@@ -121,8 +121,13 @@ class DeepQLearning(luchador.util.StoreMixin, object):
             Session object in which computation is curried out.
         """
         # pylint: disable=too-many-locals
-        model_0, state_0, action_value_0 = _make_model(model_def, 'pre_trans')
-        model_1, state_1, action_value_1 = _make_model(model_def, 'post_trans')
+        model = nn.make_model(model_def)
+        model_0 = model.models['pre_trans']
+        model_1 = model.models['post_trans']
+        state_0 = model_0.input
+        state_1 = model_1.input
+        action_value_0 = model_0.output
+        action_value_1 = model_1.output
         sync_op = _build_sync_op(model_0, model_1, 'sync_q_network')
 
         with nn.variable_scope('target_q_value'):
