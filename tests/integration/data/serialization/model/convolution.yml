@@ -1,66 +1,3 @@
-layer_configs: &layer_configs
-  #---------------------------------------------
-  - typename: TrueDiv
-    args:
-      scope: layer0/preprocessing
-      denom: 255
-  #=============================================
-  - typename: Conv2D
-    args: &conv2d_valid
-      scope: layer1/conv2D_valid
-      n_filters: 32
-      filter_width: 8
-      filter_height: 8
-      strides: 4
-      padding: valid
-  - typename: Sigmoid
-    args:
-      scope: layer1/Sigmoid
-  #---------------------------------------------
-  - typename: Conv2D
-    args: &conv2d_same
-      scope: layer2/conv2D_same
-      n_filters: 64
-      filter_width: 4
-      filter_height: 4
-      strides: 2
-      padding: same
-      with_bias: False
-  - typename: Tanh
-    args:
-      scope: layer2/tanh
-  #---------------------------------------------
-  - typename: Conv2DTranspose
-    args:
-      << : *conv2d_same
-      output_shape: [32, 32, 20, 20]
-      output_shape_format: NCHW
-      scope: layer3/conv2DT_same
-  - typename: ReLU
-    args:
-      scope: layer3/ReLU
-  #---------------------------------------------
-  - typename: Conv2DTranspose
-    args:
-      << : *conv2d_valid
-      scope: layer4/conv2DT_valid
-    parameters:
-      filter:
-        typename: Variable
-        reuse: True
-        name: layer1/conv2D_valid/filter
-      original_input:
-        typename: Tensor
-        name: layer0/preprocessing/output
-  - typename: ReLU
-    args:
-      scope: layer4/ReLU
-  #=============================================
-  - typename: Flatten
-    args:
-      scope: layer5/flatten
-  #---------------------------------------------
-
 model: &model
   typename: Sequential
   args:
@@ -71,7 +8,65 @@ model: &model
         shape: {input_shape}
         name: state
     layer_configs:
-      *layer_configs
+      - typename: TrueDiv
+        args:
+          scope: layer0/preprocessing
+          denom: 255
+      #=============================================
+      - typename: Conv2D
+        args: &conv2d_valid
+          scope: layer1/conv2D_valid
+          n_filters: 32
+          filter_width: 8
+          filter_height: 8
+          strides: 4
+          padding: valid
+      - typename: Sigmoid
+        args:
+          scope: layer1/Sigmoid
+      #---------------------------------------------
+      - typename: Conv2D
+        args: &conv2d_same
+          scope: layer2/conv2D_same
+          n_filters: 64
+          filter_width: 4
+          filter_height: 4
+          strides: 2
+          padding: same
+          with_bias: False
+      - typename: Tanh
+        args:
+          scope: layer2/tanh
+      #---------------------------------------------
+      - typename: Conv2DTranspose
+        args:
+          << : *conv2d_same
+          output_shape: [32, 32, 20, 20]
+          output_shape_format: NCHW
+          scope: layer3/conv2DT_same
+      - typename: ReLU
+        args:
+          scope: layer3/ReLU
+      #---------------------------------------------
+      - typename: Conv2DTranspose
+        args:
+          << : *conv2d_valid
+          scope: layer4/conv2DT_valid
+        parameters:
+          filter:
+            typename: Variable
+            reuse: True
+            name: layer1/conv2D_valid/filter
+          original_input:
+            typename: Tensor
+            name: layer0/preprocessing/output
+      - typename: ReLU
+        args:
+          scope: layer4/ReLU
+      #=============================================
+      - typename: Flatten
+        args:
+          scope: layer5/flatten
 
 typename: Container
 args:
