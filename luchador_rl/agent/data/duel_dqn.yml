@@ -75,10 +75,10 @@ advantage_value_layers: &advantage_value_layers
       scope: advantage/layer7/mean_shift
 
 ################################################################################
-pre_trans_common: &pre_trans_common
+common: &common
   typename: Sequential
   args:
-    name: pre_trans_common
+    name: common
     input_config:
       typename: Input
       reuse: True
@@ -86,38 +86,38 @@ pre_trans_common: &pre_trans_common
     layer_configs:
       *common_layers
 
-pre_trans_state_value: &pre_trans_state_value
+state_value: &state_value
   typename: Sequential
   args:
-    name: pre_trans_state_value
+    name: state_value
     input_config:
       typename: Model
-      name: pre_trans_common
+      name: common
       fetch: output
     layer_configs:
       *state_value_layers
 
-pre_trans_advantage: &pre_trans_advantage
+advantage: &advantage
   typename: Sequential
   args:
-    name: pre_trans_advantage
+    name: advantage
     input_config:
       typename: Model
-      name: pre_trans_common
+      name: common
       fetch: output
     layer_configs:
       *advantage_value_layers
 
-pre_trans_q_value: &pre_trans_q_value
+q_value: &q_value
   typename: Sequential
   args:
-    name: pre_trans_q_value
+    name: q_value
     input_config:
       - typename: Model
-        name: pre_trans_state_value
+        name: state_value
         fetch: output
       - typename: Model
-        name: pre_trans_advantage
+        name: advantage
         fetch: output
     layer_configs:
       - typename: Anonymous
@@ -125,7 +125,7 @@ pre_trans_q_value: &pre_trans_q_value
           exp: x[0] + x[1]
           scope: q_value/layer9
 
-pre_trans: &pre_trans
+model: &model
   typename: Container
   args:
     input_config:
@@ -136,100 +136,25 @@ pre_trans: &pre_trans
         name: state
     output_config:
       typename: Model
-      name: pre_trans_q_value
+      name: q_value
       fetch: output
     model_configs:
-      - <<: *pre_trans_common
+      - <<: *common
         name: common
-      - <<: *pre_trans_state_value
+      - <<: *state_value
         name: state_value
-      - <<: *pre_trans_advantage
+      - <<: *advantage
         name: advantage
-      - <<: *pre_trans_q_value
+      - <<: *q_value
         name: q_value
-
-################################################################################
-post_trans_common: &post_trans_common
-  typename: Sequential
-  args:
-    name: post_trans_common
-    input_config:
-      typename: Input
-      reuse: True
-      name: state
-    layer_configs:
-      *common_layers
-
-post_trans_state_value: &post_trans_state_value
-  typename: Sequential
-  args:
-    name: post_trans_state_value
-    input_config:
-      typename: Model
-      name: post_trans_common
-      fetch: output
-    layer_configs:
-      *state_value_layers
-
-post_trans_advantage: &post_trans_advantage
-  typename: Sequential
-  args:
-    name: post_trans_advantage
-    input_config:
-      typename: Model
-      name: post_trans_common
-      fetch: output
-    layer_configs:
-      *advantage_value_layers
-
-post_trans_q_value: &post_trans_q_value
-  typename: Sequential
-  args:
-    name: post_trans_q_value
-    input_config:
-      - typename: Model
-        name: post_trans_state_value
-        fetch: output
-      - typename: Model
-        name: post_trans_advantage
-        fetch: output
-    layer_configs:
-      - typename: Anonymous
-        args:
-          exp: x[0] + x[1]
-          scope: q_value/layer9
-
-post_trans: &post_trans
-  typename: Container
-  args:
-    input_config:
-      typename: Input
-      args:
-        dtype: uint8
-        shape: {input_shape}
-        name: state
-    output_config:
-      typename: Model
-      name: post_trans_q_value
-      fetch: output
-    model_configs:
-      - <<: *post_trans_common
-        name: common
-      - <<: *post_trans_state_value
-        name: state_value
-      - <<: *post_trans_advantage
-        name: advantage
-      - <<: *post_trans_q_value
-        name: q_value
-
 
 ################################################################################
 typename: Container
 args:
   model_configs:
-    - <<: *pre_trans
+    - <<: *model
       name: pre_trans
       scope: pre_trans
-    - <<: *post_trans
+    - <<: *model
       name: post_trans
       scope: post_trans
