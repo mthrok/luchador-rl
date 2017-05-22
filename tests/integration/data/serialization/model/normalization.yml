@@ -9,39 +9,39 @@ args:
   layer_configs:
     - typename: TrueDiv
       args:
+        scope: layer0/preprocessing
         denom: 255
-        name: layer0/preprocessing
     - typename: BatchNormalization
       args:
+        scope: layer3/BatchNormalization
         learn: True
-        name: layer3/BatchNormalization
     - typename: LeakyReLU
       args:
-        name: layer3/ReLU
+        scope: layer3/ReLU
         train: True
         alpha: 0.1
     - typename: Flatten
       args:
-        name: layer4/flatten
+        scope: layer4/flatten
     - typename: Dense
       args:
+        scope: layer5/dense
         n_nodes: 512
         with_bias: False
-        name: layer5/dense
     - typename: BatchNormalization
       args:
+        scope: layer5/BatchNormalization
         learn: True
-        name: layer5/BatchNormalization
     - typename: LeakyReLU
       args:
-        name: layer5/ReLU
+        scope: layer5/ReLU
         alpha: 0.1
     - typename: Dense
       args:
+        scope: layer6/dense
         n_nodes: {n_actions}
         with_bias: False
-        name: layer6/dense
     - typename: BatchNormalization
       args:
+        scope: layer6/BatchNormalization
         learn: True
-        name: layer6/BatchNormalization

@@ -22,14 +22,6 @@ def _validate_q_learning_config(min_reward=None, max_reward=None, **_):
             'and `max_reward` must be provided.')
 
 
-def _make_model(model_def, scope):
-    with nn.variable_scope(scope):
-        model = nn.make_model(model_def)
-        state = model.input
-        action_value = model.output
-    return model, state, action_value
-
-
 def _build_sync_op(src_model, tgt_model, scope):
     with nn.variable_scope(scope):
         src_vars = src_model.get_parameters_to_serialize()
