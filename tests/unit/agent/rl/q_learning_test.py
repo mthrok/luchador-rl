@@ -58,16 +58,16 @@ class DQNTest(fixture.TestCase):
         shape = [None, 4, 84, 84] if _CONV == 'NCHW' else [None, 84, 84, 4]
         model_def = get_model_config(
             'vanilla_dqn', input_shape=shape, n_actions=5)
-        # Skip biases as they are deterministically initialized
-        for cfg in model_def['args']['layer_configs']:
-            if cfg['typename'] in ['Conv2D', 'Dense']:
-                cfg['args']['with_bias'] = False
 
         with nn.variable_scope(self.get_scope()):
             dqn = _make_dqn(model_def=model_def)
 
         params0 = dqn.models['model_0'].get_parameters_to_train()
         params1 = dqn.models['model_1'].get_parameters_to_train()
+
+        # Skip biases as they are deterministically initialized
+        params0 = [var for var in params0 if not var.name.endswith('bias')]
+        params1 = [var for var in params1 if not var.name.endswith('bias')]
 
         # check that variables are different before sync
         vars0 = dqn.session.run(outputs=params0)
